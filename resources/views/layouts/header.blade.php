@@ -7,7 +7,7 @@
                 </div>
             </div>
             <div class="relative" x-data="{ open: false }">
-                <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none">
+                <button @click="open = !open" class="flex items-center space-x-2 focus:outline-none cursor-pointer">
                     <span class="text-sm text-gray-500">{{ auth()->user()->name }}</span>
                     <div class="flex items-center">
                         <div class="h-8 w-8 bg-blue-500 rounded-full flex items-center justify-center mr-1">
@@ -44,7 +44,7 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit"
-                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">
                                 Logout
                             </button>
                         </form>
