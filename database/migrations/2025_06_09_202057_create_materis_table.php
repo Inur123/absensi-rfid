@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('peserta', function (Blueprint $table) {
+       Schema::create('materis', function (Blueprint $table) {
             $table->id();
-            $table->string('id_rfid')->unique();
             $table->string('nama');
-            $table->string('asal_delegasi');
+            $table->text('deskripsi')->nullable();
             $table->enum('komisi', ['organisasi', 'program-kerja', 'rekomendasi']);
-            $table->enum('jenis_kelamin', ['Laki-laki', 'Perempuan']); // kolom jenis kelamin ditambahkan di sini
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('peserta');
+        Schema::dropIfExists('materis');
     }
 };

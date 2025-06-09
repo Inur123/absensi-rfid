@@ -33,6 +33,7 @@ class PesertaController extends Controller
             'nama' => 'required',
             'asal_delegasi' => 'required',
             'komisi' => 'required|in:organisasi,program-kerja,rekomendasi',
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan', // Validasi jenis kelamin
         ]);
 
         Peserta::create($request->all());
@@ -60,6 +61,7 @@ class PesertaController extends Controller
         'nama' => 'required',
         'asal_delegasi' => 'required',
         'komisi' => 'required|in:organisasi,program-kerja,rekomendasi',
+        'jenis_kelamin' => 'required|in:Laki-laki,Perempuan', // Validasi jenis kelamin
     ]);
 
     $peserta->update($request->all());

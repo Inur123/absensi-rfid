@@ -5,17 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Peserta extends Model
+class Materi extends Model
 {
     use HasFactory;
 
-    protected $table = 'peserta';
-
     protected $fillable = [
-        'id_rfid',
         'nama',
-        'asal_delegasi',
+        'deskripsi',
         'komisi',
-        'jenis_kelamin',
     ];
+
+    public static function getKomisiList(): array
+    {
+        return ['organisasi', 'program-kerja', 'rekomendasi'];
+    }
 }

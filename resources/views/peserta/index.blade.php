@@ -29,14 +29,17 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID Kartu
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Asal
                             Delegasi</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jabatan
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Komisi
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis
+                            Kelamin
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal
                             Daftar</th>
@@ -44,9 +47,10 @@
                     </tr>
                 </thead>
                 <tbody id="peserta-table" class="bg-white divide-y divide-gray-200">
-                 @foreach ($peserta as $index => $p)
+                    @foreach ($peserta as $index => $p)
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900"> {{ ($peserta->currentPage() - 1) * $peserta->perPage() + $index + 1 }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">
+                                {{ ($peserta->currentPage() - 1) * $peserta->perPage() + $index + 1 }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900">{{ $p->id_rfid }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $p->nama }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $p->asal_delegasi }}</td>
@@ -64,6 +68,10 @@
                                     {{ ucfirst(str_replace('-', ' ', $p->komisi)) }}
                                 </span>
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ $p->jenis_kelamin }}
+                            </td>
+
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $p->created_at->format('Y-m-d') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
