@@ -14,17 +14,19 @@
     </div>
 
     <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-medium text-gray-900">Daftar Peserta Terdaftar</h3>
-                <div class="flex space-x-2">
-                    <button class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200">
-                        <i class="ri-download-line w-4 h-4 inline mr-1"></i>
-                        Export
-                    </button>
-                </div>
-            </div>
+       <div class="px-6 py-4 border-b border-gray-200">
+    <div class="flex justify-between items-center">
+        <h3 class="text-lg font-medium text-gray-900">Daftar Peserta Terdaftar</h3>
+        <div class="flex space-x-2">
+            <a href="{{ route('peserta.export') }}"
+               class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded hover:bg-green-200">
+                <i class="ri-download-line w-4 h-4 inline mr-1"></i>
+                Export
+            </a>
         </div>
+    </div>
+</div>
+
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">

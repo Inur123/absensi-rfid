@@ -20,9 +20,11 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('peserta', PesertaController::class);
+    Route::get('/peserta/export/pdf', [PesertaController::class, 'export'])->name('peserta.export');
     Route::resource('materi', MateriController::class);
     Route::resource('absensi', AbsensiController::class);
     Route::get('/absensi/scan/{materi}', [AbsensiController::class, 'scan'])->name('absensi.scan');
+    Route::get('/absensi/export/{materi}', [AbsensiController::class, 'export'])->name('absensi.export');
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

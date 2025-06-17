@@ -5,26 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Materi;
 use App\Models\Absensi;
 use App\Models\Peserta;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class AbsensiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $materis = Materi::latest()->paginate(10);
         return view('absensi.index', compact('materis'));
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        // Validate the request
         $validator = Validator::make($request->all(), [
             'id_rfid' => 'required|string',
             'materi_id' => 'required|exists:materis,id'
@@ -71,15 +65,26 @@ class AbsensiController extends Controller
             ->with('success', "Absensi berhasil dicatat untuk {$peserta->nama} ({$peserta->asal_delegasi})");
     }
 
-    /**
-     * Display the scan page for a specific material.
-     */
-public function scan($materiId)
+    public function scan($materiId)
+    {
+        // Ambil data materi
+        $materi = Materi::findOrFail($materiId);
+
+        // Ambil peserta yang komisinya sama dengan materi, dan preload absensi mereka hanya untuk materi ini
+        $peserta = Peserta::where('komisi', $materi->komisi)
+            ->with(['absensi' => function ($query) use ($materiId) {
+                $query->where('materi_id', $materiId);
+            }])
+            ->orderBy('nama')
+            ->get();
+
+        return view('absensi.scan', compact('materi', 'peserta'));
+    }
+    public function export($materiId)
 {
-    // Ambil data materi
     $materi = Materi::findOrFail($materiId);
 
-    // Ambil peserta yang komisinya sama dengan materi, dan preload absensi mereka hanya untuk materi ini
+    // Ambil semua peserta dan absensinya untuk materi ini
     $peserta = Peserta::where('komisi', $materi->komisi)
         ->with(['absensi' => function ($query) use ($materiId) {
             $query->where('materi_id', $materiId);
@@ -87,10 +92,12 @@ public function scan($materiId)
         ->orderBy('nama')
         ->get();
 
-    return view('absensi.scan', compact('materi', 'peserta'));
+    // Ambil waktu sekarang dalam format lokal
+    $currentDateTime = Carbon::now()->translatedFormat('d F Y H:i') . ' WIB';
+
+    // Kirim semuanya ke view
+    $pdf = Pdf::loadView('absensi.export', compact('materi', 'peserta', 'currentDateTime'));
+
+    return $pdf->download('absensi_' . $materi->nama . '.pdf');
 }
-
-
-
-
 }
