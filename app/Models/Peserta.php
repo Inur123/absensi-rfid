@@ -18,4 +18,11 @@ class Peserta extends Model
         'komisi',
         'jenis_kelamin',
     ];
+
+
+    public function absensi()
+{
+    return $this->hasMany(\App\Models\Absensi::class, 'peserta_id');
+}
+
 }
