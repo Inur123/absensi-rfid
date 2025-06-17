@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use App\Models\Peserta;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use Illuminate\Support\Facades\Auth;
 
 class PesertaController extends Controller
 {
@@ -15,9 +15,10 @@ class PesertaController extends Controller
      */
     public function index()
     {
-        $peserta = Peserta::paginate(20);
+       $peserta = Peserta::where('user_id', Auth::id())->orderBy('nama')->paginate(20);
         return view('peserta.index', compact('peserta'));
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -36,19 +37,27 @@ class PesertaController extends Controller
             'nama' => 'required',
             'asal_delegasi' => 'required',
             'komisi' => 'required|in:organisasi,program-kerja,rekomendasi',
-            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan', // Validasi jenis kelamin
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
         ]);
 
-        Peserta::create($request->all());
+        Peserta::create([
+            'user_id' =>Auth::id(),
+            'id_rfid' => $request->id_rfid,
+            'nama' => $request->nama,
+            'asal_delegasi' => $request->asal_delegasi,
+            'komisi' => $request->komisi,
+            'jenis_kelamin' => $request->jenis_kelamin,
+        ]);
 
         return redirect()->route('peserta.index')->with('success', 'Peserta berhasil ditambahkan.');
     }
+
     /**
      * Show the form for editing the specified resource.
      */
     public function edit($id)
     {
-        $peserta = Peserta::findOrFail($id);
+        $peserta = Peserta::where('user_id', Auth::id())->findOrFail($id);
         return view('peserta.edit', compact('peserta'));
     }
 
@@ -57,36 +66,47 @@ class PesertaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $peserta = Peserta::findOrFail($id);
+        $peserta = Peserta::where('user_id', Auth::id())->findOrFail($id);
 
         $request->validate([
             'id_rfid' => 'required|unique:peserta,id_rfid,' . $id,
             'nama' => 'required',
             'asal_delegasi' => 'required',
             'komisi' => 'required|in:organisasi,program-kerja,rekomendasi',
-            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan', // Validasi jenis kelamin
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
         ]);
 
-        $peserta->update($request->all());
+        $peserta->update([
+            'id_rfid' => $request->id_rfid,
+            'nama' => $request->nama,
+            'asal_delegasi' => $request->asal_delegasi,
+            'komisi' => $request->komisi,
+            'jenis_kelamin' => $request->jenis_kelamin,
+        ]);
 
         return redirect()->route('peserta.index')->with('success', 'Peserta berhasil diupdate.');
     }
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Peserta $peserta)
+    public function destroy($id)
     {
+        $peserta = Peserta::where('user_id', Auth::id())->findOrFail($id);
         $peserta->delete();
+
         return redirect()->route('peserta.index')->with('success', 'Peserta berhasil dihapus.');
     }
+
+    /**
+     * Export the peserta data to PDF.
+     */
     public function export()
-{
-    $peserta = Peserta::orderBy('nama')->get();
-    $currentDateTime = Carbon::now()->translatedFormat('d F Y H:i') . ' WIB';
+    {
+        $peserta = Peserta::where('user_id', Auth::id())->orderBy('nama')->get();
+        $currentDateTime = Carbon::now()->translatedFormat('d F Y H:i') . ' WIB';
 
-    $pdf = Pdf::loadView('peserta.export', compact('peserta', 'currentDateTime'));
-
-    return $pdf->download('daftar_peserta.pdf');
-}
-
+        $pdf = Pdf::loadView('peserta.export', compact('peserta', 'currentDateTime'));
+        return $pdf->download('daftar_peserta.pdf');
+    }
 }

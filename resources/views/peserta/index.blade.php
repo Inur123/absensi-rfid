@@ -75,7 +75,7 @@
                             </td>
 
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $p->created_at->format('Y-m-d') }}</td>
+                                {{ $p->created_at->format('d-m-Y') }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 <a href="{{ route('peserta.edit', $p->id) }}"
                                     class="text-blue-600 hover:text-blue-900 mr-3">

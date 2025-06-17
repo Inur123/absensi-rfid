@@ -12,6 +12,7 @@ class Peserta extends Model
     protected $table = 'peserta';
 
     protected $fillable = [
+        'user_id',
         'id_rfid',
         'nama',
         'asal_delegasi',
@@ -24,5 +25,10 @@ class Peserta extends Model
 {
     return $this->hasMany(\App\Models\Absensi::class, 'peserta_id');
 }
+public function user()
+{
+    return $this->belongsTo(User::class);
+}
+
 
 }

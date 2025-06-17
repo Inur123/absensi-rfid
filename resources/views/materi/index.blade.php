@@ -42,23 +42,23 @@
                             </div>
                         </div>
                         <div class="flex">
-    <div class="flex space-x-2 ml-auto">
-        <a href="{{ route('materi.edit', $materi->id) }}"
-            class="text-xs px-4 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 inline-flex items-center justify-center">
-            <i class="ri-edit-line text-sm mr-1"></i> Edit
-        </a>
+                            <div class="flex space-x-2 ml-auto">
+                                <a href="{{ route('materi.edit', $materi->id) }}"
+                                    class="text-xs px-4 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 inline-flex items-center justify-center">
+                                    <i class="ri-edit-line text-sm mr-1"></i> Edit
+                                </a>
 
-        <form action="{{ route('materi.destroy', $materi->id) }}" method="POST"
-            onsubmit="return confirm('Yakin ingin hapus?')" class="inline">
-            @csrf
-            @method('DELETE')
-            <button type="submit"
-                class="text-xs px-4 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 inline-flex items-center justify-center cursor-pointer">
-                <i class="ri-delete-bin-line text-sm mr-1"></i> Delete
-            </button>
-        </form>
-    </div>
-</div>
+                                <form action="{{ route('materi.destroy', $materi->id) }}" method="POST"
+                                    onsubmit="return confirm('Yakin ingin hapus?')" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="text-xs px-4 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 inline-flex items-center justify-center cursor-pointer">
+                                        <i class="ri-delete-bin-line text-sm mr-1"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
 
                     </div>
                 @endforeach

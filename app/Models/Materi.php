@@ -10,6 +10,7 @@ class Materi extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'nama',
         'deskripsi',
         'komisi',
@@ -19,4 +20,9 @@ class Materi extends Model
     {
         return ['organisasi', 'program-kerja', 'rekomendasi'];
     }
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}
+
 }

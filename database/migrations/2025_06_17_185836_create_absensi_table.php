@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('absensi', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('peserta_id')->constrained('peserta')->onDelete('cascade');
             $table->foreignId('materi_id')->constrained('materis')->onDelete('cascade');
             $table->enum('status', ['hadir', 'terlambat', 'tidak_hadir'])->default('hadir');

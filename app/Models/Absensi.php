@@ -12,6 +12,7 @@ class Absensi extends Model
     protected $table = 'absensi'; // Specify the table name if different from Laravel's convention
 
     protected $fillable = [
+        'user_id',
         'peserta_id',
         'materi_id',
         'waktu_absen',
@@ -44,4 +45,9 @@ class Absensi extends Model
             'tidak_hadir' => 'Tidak Hadir'
         ];
     }
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}
+
 }

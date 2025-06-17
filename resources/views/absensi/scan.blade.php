@@ -13,7 +13,7 @@
                         </div>
                         <div>
                             <h1 class="text-xl font-bold text-gray-900">Scan Absensi RFID</h1>
-                            <p class="text-gray-600 text-sm">Tempelkan kartu RFID atau masukkan manual</p>
+                            <p class="text-gray-600 text-sm">Tempelkan kartu RFID</p>
                         </div>
                     </div>
                     <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-4 text-white min-w-[250px]">
