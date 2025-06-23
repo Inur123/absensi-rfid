@@ -17,7 +17,7 @@
                         </div>
                     </div>
                     <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-4 text-white min-w-[250px]">
-                        <div class="text-sm opacity-90">{{ $materi->nama }}</div>
+                        <div class="text-sm font-bold opacity-90 text-center">{{ $materi->nama }}</div>
                     </div>
                 </div>
             </div>

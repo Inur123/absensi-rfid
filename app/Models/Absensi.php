@@ -50,4 +50,9 @@ class Absensi extends Model
     return $this->belongsTo(User::class);
 }
 
+public function materi()
+{
+    return $this->belongsTo(Materi::class);
+}
+
 }

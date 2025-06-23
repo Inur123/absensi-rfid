@@ -1,77 +1,86 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="flex items-center justify-between mb-4">
-        <div>
-            <h2 class="text-2xl font-bold text-gray-900 mb-1">Tambah Materi Baru</h2>
-            <p class="text-gray-600">Formulir penambahan materi baru</p>
-        </div>
-    </div>
-
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-medium text-gray-900">Form Tambah Materi</h3>
-        </div>
-
-        <div class="p-6">
-            <form action="{{ route('materi.store') }}" method="POST">
-                @csrf
-
-                <!-- Option 1: Layout like in the screenshot -->
-                <div class="space-y-6">
-                    <!-- Nama Materi -->
-                    <div>
-                        <label for="nama" class="block text-sm font-medium text-gray-700 mb-1">Nama Materi</label>
-                        <input type="text" name="nama" id="nama" required
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Masukkan nama materi">
-                        @error('nama')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+    <div class="min-h-screen bg-gradient-to-br py-4">
+        <div class="max-w-6xl mx-auto px-4">
+            <!-- Header -->
+            <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-4 mb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                        <i class="ri-add-line text-xl text-white"></i>
                     </div>
-                    <!-- Deskripsi -->
                     <div>
-                        <label for="deskripsi" class="block text-sm font-medium text-gray-700 mb-1">Deskripsi</label>
-                        <input type="text" name="deskripsi" id="deskripsi"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Masukkan deskripsi materi (opsional)">
-                        @error('deskripsi')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                        <h1 class="text-xl font-bold text-gray-900">Tambah Materi Baru</h1>
+                        <p class="text-gray-600 text-sm">Formulir penambahan materi baru untuk sistem absensi</p>
                     </div>
-                    <!-- Komisi -->
-                    <div>
-                        <label for="komisi" class="block text-sm font-medium text-gray-700 mb-1">Komisi</label>
-                        <select name="komisi" id="komisi" required
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">Pilih Komisi</option>
-                            <option value="organisasi">Organisasi</option>
-                            <option value="program-kerja">Program Kerja</option>
-                            <option value="rekomendasi">Rekomendasi</option>
-                        </select>
-                        @error('komisi')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
+                </div>
+            </div>
+
+            <!-- Form Tambah Materi -->
+            <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-6 mb-8">
+                <form action="{{ route('materi.store') }}" method="POST" class="space-y-6">
+                    @csrf
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Nama Materi -->
+                        <div class="md:col-span-2">
+                            <label for="nama" class="block text-sm font-medium text-gray-700 mb-2">
+                                Nama Materi
+                            </label>
+                            <input type="text" name="nama" id="nama" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Masukkan nama materi">
+                            @error('nama')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Deskripsi -->
+                        <div class="md:col-span-2">
+                            <label for="deskripsi" class="block text-sm font-medium text-gray-700 mb-2">
+                                Deskripsi
+                            </label>
+                            <textarea name="deskripsi" id="deskripsi" rows="3"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                placeholder="Masukkan deskripsi materi (opsional)"></textarea>
+                            @error('deskripsi')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Komisi -->
+                        <div>
+                            <label for="komisi" class="block text-sm font-medium text-gray-700 mb-2">
+                                Komisi
+                            </label>
+                            <select name="komisi" id="komisi" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="">Pilih Komisi</option>
+                                <option value="organisasi">Organisasi</option>
+                                <option value="program-kerja">Program Kerja</option>
+                                <option value="rekomendasi">Rekomendasi</option>
+                            </select>
+                            @error('komisi')
+                                <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                            @enderror
+                        </div>
                     </div>
 
-
-
-
-                    <!-- Tombol Action - Positioned at the bottom right like in screenshot -->
-                    <div class="flex justify-end space-x-2 pt-4">
+                    <!-- Tombol Action -->
+                    <div class="flex justify-end space-x-3 pt-4">
                         <a href="{{ route('materi.index') }}"
-                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <i class="ri-close-line mr-1"></i>
+                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-colors">
+                            <i class="ri-close-line w-4 h-4 inline mr-1"></i>
                             Batal
                         </a>
                         <button type="submit"
-                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200">
-                            <i class="ri-save-line mr-1"></i>
+                            class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-sm transition-all">
+                            <i class="ri-save-line w-4 h-4 inline mr-1"></i>
                             Simpan
                         </button>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 @endsection
