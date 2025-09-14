@@ -3,12 +3,11 @@
 @section('content')
     <div class="min-h-screen bg-gradient-to-br py-4">
         <div class="max-w-6xl mx-auto px-4">
-            <!-- Compact Header -->
             <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-4 mb-4">
                 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                     <div class="flex items-center gap-3">
                         <div
-                            class="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                            class="w-10 h-10 bg-gradient-to-r from-red-700 to-red-600 rounded-lg flex items-center justify-center">
                             <i class="ri-rfid-line text-xl text-white"></i>
                         </div>
                         <div>
@@ -16,26 +15,24 @@
                             <p class="text-gray-600 text-sm">Tempelkan kartu RFID</p>
                         </div>
                     </div>
-                    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-4 text-white min-w-[250px]">
+                    <div class="bg-gradient-to-r from-orange-600 to-orange-500 rounded-xl p-4 text-white min-w-[250px]">
                         <div class="text-sm font-bold opacity-90 text-center">{{ $materi->nama }}</div>
                     </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <!-- Compact RFID Scanning Area -->
                 <div class="lg:col-span-1">
                     <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-4">
                         <h2 class="text-lg font-bold text-gray-900 mb-3 text-center">Area Pemindaian</h2>
 
-                        <!-- Compact Scan Zone -->
                         <div
-                            class="relative bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-2xl p-6 border-2 border-dashed border-gray-300 hover:border-blue-400 transition-all duration-300">
+                            class="relative bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-2xl p-6 border-2 border-dashed border-gray-300 hover:border-orange-400 transition-all duration-300">
                             <div class="flex flex-col items-center space-y-3">
                                 <div class="relative">
-                                    <div class="absolute inset-0 w-16 h-16 bg-blue-400/20 rounded-full animate-ping"></div>
+                                    <div class="absolute inset-0 w-16 h-16 bg-red-400/20 rounded-full animate-ping"></div>
                                     <div
-                                        class="relative w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
+                                        class="relative w-16 h-16 bg-gradient-to-r from-red-700 to-red-600 rounded-full flex items-center justify-center shadow-lg">
                                         <i class="ri-rfid-line text-2xl text-white"></i>
                                     </div>
                                 </div>
@@ -50,7 +47,6 @@
                             </div>
                         </div>
 
-                        <!-- Compact Summary Stats -->
                         <div class="mt-4 grid grid-cols-2 gap-2">
                             @php
                                 $total = count($peserta);
@@ -94,15 +90,32 @@
                     </div>
                 </div>
 
-                <!-- Compact Attendance Table -->
                 <div class="lg:col-span-2">
                     <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 overflow-hidden">
-                        <div class="px-4 py-3 border-b border-gray-200/50 bg-gradient-to-r from-gray-50 to-gray-100">
+                        <div
+                            class="px-4 py-3 border-b border-gray-200/50 bg-gradient-to-r from-gray-50 to-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                             <h3 class="text-lg font-bold text-gray-900">Daftar Kehadiran</h3>
+                            <!-- Search Input -->
+                            <form action="{{ route('absensi.scan', $materi->id) }}" method="GET"
+                                class="flex items-center mb-4">
+                                <input type="text" name="search" value="{{ request('search') }}"
+                                    placeholder="Cari nama, RFID, delegasi..."
+                                    class="px-3 py-1.5 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none">
+                                <button type="submit"
+                                    class="ml-2 px-3 py-1.5 text-sm bg-orange-100 text-orange-700 rounded-md hover:bg-orange-200 transition-colors cursor-pointer">
+                                    <i class="ri-search-line"></i>
+                                </button>
+                                <a href="{{ route('absensi.scan', $materi->id) }}"
+                                    class="ml-2 px-3 py-1.5 text-sm bg-gray-200 text-gray-900 rounded-md hover:bg-gray-300 transition-colors cursor-pointer flex items-center">
+                                    <i class="ri-refresh-line mr-1"></i> Clear
+                                </a>
+
+                            </form>
                         </div>
 
+
                         <div class="overflow-x-auto max-h-96 overflow-y-auto">
-                            <table class="min-w-full divide-y divide-gray-200 text-sm">
+                            <table class="min-w-full divide-y divide-gray-200 text-sm" id="attendanceTable">
                                 <thead class="bg-gray-50 sticky top-0">
                                     <tr>
                                         <th class="py-2 px-3 text-left text-xs font-semibold text-gray-900 uppercase">No
@@ -123,27 +136,28 @@
                                             $attendance = $p->absensi->where('materi_id', $materi->id)->first();
                                             $status = $attendance ? $attendance->status : 'belum_absen';
                                         @endphp
-                                        <tr class="hover:bg-gray-50/50 transition-colors duration-200">
+                                        <tr class="hover:bg-gray-50/50 transition-colors">
                                             <td class="py-2 px-3 text-xs text-gray-900">{{ $index + 1 }}</td>
                                             <td class="py-2 px-3 text-xs font-mono text-gray-900 bg-gray-50/30 rounded">
                                                 {{ $p->id_rfid }}</td>
-                                            <td class="py-2 px-3 text-xs font-medium text-gray-900">{{ $p->nama }}</td>
+                                            <td class="py-2 px-3 text-xs font-medium text-gray-900">{{ $p->nama }}
+                                            </td>
                                             <td class="py-2 px-3 text-xs text-gray-500">{{ $p->asal_delegasi }}</td>
                                             <td class="py-2 px-3 text-xs">
                                                 <span
                                                     class="px-2 py-1 inline-flex items-center text-xs leading-4 font-semibold rounded-full
-                                                @if ($status === 'hadir') bg-green-100 text-green-800
-                                                @elseif($status === 'terlambat') bg-yellow-100 text-yellow-800
-                                                @elseif($status === 'tidak_hadir') bg-red-100 text-red-800
-                                                @else bg-gray-100 text-gray-800 @endif">
+                                    @if ($status === 'hadir') bg-green-100 text-green-800
+                                    @elseif($status === 'terlambat') bg-yellow-100 text-yellow-800
+                                    @elseif($status === 'tidak_hadir') bg-red-100 text-red-800
+                                    @else bg-gray-100 text-gray-800 @endif">
                                                     @if ($status === 'hadir')
-                                                        <i class="ri-check-line mr-1"></i>Hadir
+                                                        Hadir
                                                     @elseif($status === 'terlambat')
-                                                        <i class="ri-time-line mr-1"></i>Terlambat
+                                                        Terlambat
                                                     @elseif($status === 'tidak_hadir')
-                                                        <i class="ri-close-line mr-1"></i>Tidak Hadir
+                                                        Tidak Hadir
                                                     @else
-                                                        <i class="ri-question-line mr-1"></i>Belum
+                                                        Belum
                                                     @endif
                                                 </span>
                                             </td>
@@ -156,7 +170,6 @@
                 </div>
             </div>
 
-            <!-- Enhanced Status Modal -->
             @if (session('success') || session('error'))
                 <div id="statusModal"
                     class="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm">
@@ -191,7 +204,7 @@
                             @endif
 
                             <button type="button" onclick="closeModal()"
-                                class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300">
+                                class="w-full bg-gradient-to-r from-red-700 to-red-600 hover:from-red-800 hover:to-red-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300">
                                 Tutup
                             </button>
                         </div>
@@ -199,7 +212,6 @@
                 </div>
             @endif
 
-            <!-- Hidden Form -->
             <form method="POST" action="{{ route('absensi.store') }}" id="rfid_form"
                 style="opacity: 0; position: absolute; left: -9999px;">
                 @csrf
@@ -208,15 +220,14 @@
                 <button type="submit" id="hidden_submit"></button>
             </form>
 
-            <!-- Visual Feedback -->
             <div id="scan_feedback"
                 class="fixed inset-0 flex items-center justify-center z-40 bg-black/50 backdrop-blur-sm hidden">
                 <div class="bg-white rounded-2xl p-6 max-w-xs w-full mx-4 shadow-2xl">
                     <div class="text-center">
                         <div class="relative w-16 h-16 mx-auto mb-4">
-                            <div class="absolute inset-0 bg-blue-400/20 rounded-full animate-ping"></div>
+                            <div class="absolute inset-0 bg-red-400/20 rounded-full animate-ping"></div>
                             <div
-                                class="relative w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+                                class="relative w-16 h-16 bg-gradient-to-r from-red-700 to-red-600 rounded-full flex items-center justify-center">
                                 <i class="ri-loader-4-line text-2xl text-white animate-spin"></i>
                             </div>
                         </div>

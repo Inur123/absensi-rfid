@@ -6,7 +6,7 @@
             <!-- Header -->
             <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-white/50 p-4 mb-4">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                    <div class="w-10 h-10 bg-gradient-to-r from-[#B71C1C] to-[#D32F2F] rounded-lg flex items-center justify-center">
                         <i class="ri-edit-box-line text-xl text-white"></i>
                     </div>
                     <div>
@@ -28,7 +28,7 @@
                             </label>
                             <div class="relative">
                                 <input type="text" id="id_rfid" name="id_rfid" required
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#B71C1C] focus:border-transparent"
                                     placeholder="Tap kartu RFID atau masukkan ID manual"
                                     value="{{ old('id_rfid', $peserta->id_rfid) }}"
                                     onkeydown="return event.key !== 'Enter';">
@@ -48,7 +48,7 @@
                                 Nama Lengkap
                             </label>
                             <input type="text" id="nama" name="nama" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#F57C00] focus:border-transparent"
                                 placeholder="Masukkan nama lengkap"
                                 value="{{ old('nama', $peserta->nama) }}">
                             @error('nama')
@@ -61,7 +61,7 @@
                                 Jenis Kelamin
                             </label>
                             <select id="jenis_kelamin" name="jenis_kelamin" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#F57C00] focus:border-transparent">
                                 <option value="">Pilih Jenis Kelamin</option>
                                 <option value="Laki-laki" {{ old('jenis_kelamin', $peserta->jenis_kelamin) == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
                                 <option value="Perempuan" {{ old('jenis_kelamin', $peserta->jenis_kelamin) == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
@@ -76,7 +76,7 @@
                                 Asal Delegasi
                             </label>
                             <input type="text" id="asal_delegasi" name="asal_delegasi" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFC107] focus:border-transparent"
                                 placeholder="Contoh: Pac Magetan"
                                 value="{{ old('asal_delegasi', $peserta->asal_delegasi) }}">
                             @error('asal_delegasi')
@@ -89,7 +89,7 @@
                                 Komisi
                             </label>
                             <select id="komisi" name="komisi" required
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FFC107] focus:border-transparent">
                                 <option value="">Pilih Komisi</option>
                                 <option value="organisasi" {{ old('komisi', $peserta->komisi) == 'organisasi' ? 'selected' : '' }}>Organisasi</option>
                                 <option value="program-kerja" {{ old('komisi', $peserta->komisi) == 'program-kerja' ? 'selected' : '' }}>Program Kerja</option>
@@ -103,12 +103,12 @@
 
                     <div class="flex justify-end space-x-3 pt-4">
                         <a href="{{ route('peserta.index') }}"
-                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-colors">
+                            class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#B71C1C] shadow-sm transition-colors">
                             <i class="ri-close-line w-4 h-4 inline mr-1"></i>
                             Batal
                         </a>
                         <button type="submit" id="submitButton"
-                            class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer shadow-sm transition-all">
+                            class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-[#B71C1C] to-[#D32F2F] hover:from-[#D32F2F] hover:to-[#B71C1C] border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-[#F57C00] cursor-pointer shadow-sm transition-all">
                             <i class="ri-save-line w-4 h-4 inline mr-1"></i>
                             Simpan Perubahan
                         </button>

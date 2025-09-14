@@ -13,13 +13,14 @@ use Carbon\Carbon;
 
 class AbsensiController extends Controller
 {
+    // Menampilkan daftar materi untuk absensi
     public function index()
     {
-        // Hanya tampilkan materi milik user yang login
         $materis = Materi::where('user_id', Auth::id())->latest()->paginate(10);
         return view('absensi.index', compact('materis'));
     }
 
+    // Menyimpan absensi peserta
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -31,28 +32,35 @@ class AbsensiController extends Controller
             return redirect()->back()->with('error', $validator->errors()->first());
         }
 
-        $materi = Materi::where('user_id', Auth::id())->findOrFail($request->materi_id);
+       // Ambil materi beserta komisinya
+$materi = Materi::with('komisis')->where('user_id', Auth::id())->findOrFail($request->materi_id);
 
-        $peserta = Peserta::where('id_rfid', $request->id_rfid)
-            ->where('user_id', Auth::id())
-            ->first();
+// Ambil peserta berdasarkan RFID
+$peserta = Peserta::where('id_rfid', $request->id_rfid)
+    ->where('user_id', Auth::id())
+    ->first();
 
-        if (!$peserta) {
-            return redirect()->back()->with('error', 'Peserta tidak ditemukan dengan RFID tersebut');
-        }
+if (!$peserta) {
+    return redirect()->back()->with('error', 'Peserta tidak ditemukan dengan RFID tersebut');
+}
 
-        if ($peserta->komisi !== $materi->komisi) {
-            return redirect()->back()->with('error', 'Peserta tidak terdaftar untuk materi ini');
-        }
+// Cek apakah peserta termasuk salah satu komisi materi (pakai nama)
+$materiKomisiNames = $materi->komisis->pluck('nama')->toArray();
+if (!in_array($peserta->komisi, $materiKomisiNames)) {
+    return redirect()->back()->with('error', 'Peserta tidak terdaftar untuk materi ini');
+}
 
-        $existingAbsensi = Absensi::where('peserta_id', $peserta->id)
+
+        // Cek apakah peserta sudah absen
+        $alreadyAbsensi = Absensi::where('peserta_id', $peserta->id)
             ->where('materi_id', $materi->id)
             ->exists();
 
-        if ($existingAbsensi) {
+        if ($alreadyAbsensi) {
             return redirect()->back()->with('error', 'Peserta sudah tercatat absensinya untuk materi ini');
         }
 
+        // Simpan absensi
         Absensi::create([
             'user_id' => Auth::id(),
             'peserta_id' => $peserta->id,
@@ -63,26 +71,44 @@ class AbsensiController extends Controller
         return redirect()->back()->with('success', "Absensi berhasil dicatat untuk {$peserta->nama} ({$peserta->asal_delegasi})");
     }
 
-    public function scan($materiId)
-    {
-        $materi = Materi::where('user_id', Auth::id())->findOrFail($materiId);
+    // Halaman scan absensi
+    public function scan(Request $request, $materiId)
+{
+    $materi = Materi::with('komisis')->where('user_id', Auth::id())->findOrFail($materiId);
 
-        $peserta = Peserta::where('komisi', $materi->komisi)
-            ->where('user_id', Auth::id())
-            ->with(['absensi' => function ($query) use ($materiId) {
-                $query->where('materi_id', $materiId);
-            }])
-            ->orderBy('nama')
-            ->get();
+    $materiKomisiIds = $materi->komisis->pluck('id')->toArray();
 
-        return view('absensi.scan', compact('materi', 'peserta'));
+    $pesertaQuery = Peserta::whereIn('komisi', $materiKomisiIds)
+        ->where('user_id', Auth::id())
+        ->with(['absensi' => function ($query) use ($materiId) {
+            $query->where('materi_id', $materiId);
+        }])
+        ->orderBy('nama');
+
+    // Jika ada parameter search
+    if ($request->has('search') && $request->search != '') {
+        $search = $request->search;
+        $pesertaQuery->where(function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%")
+              ->orWhere('id_rfid', 'like', "%{$search}%")
+              ->orWhere('asal_delegasi', 'like', "%{$search}%");
+        });
     }
 
+    $peserta = $pesertaQuery->get();
+
+    return view('absensi.scan', compact('materi', 'peserta'));
+}
+
+
+    // Export absensi ke PDF
     public function export($materiId)
     {
-        $materi = Materi::where('user_id', Auth::id())->findOrFail($materiId);
+        $materi = Materi::with('komisis')->where('user_id', Auth::id())->findOrFail($materiId);
 
-        $peserta = Peserta::where('komisi', $materi->komisi)
+        $materiKomisiIds = $materi->komisis->pluck('id')->toArray();
+
+        $peserta = Peserta::whereIn('komisi', $materiKomisiIds)
             ->where('user_id', Auth::id())
             ->with(['absensi' => function ($query) use ($materiId) {
                 $query->where('materi_id', $materiId);

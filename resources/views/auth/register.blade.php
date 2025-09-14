@@ -6,11 +6,11 @@
     <title>Daftar - Sistem Absensi RFID</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-gradient-to-br from-red-50 to-orange-100 min-h-screen flex items-center justify-center p-4">
     <div class="max-w-md w-full space-y-6 my-8" x-data="registerForm()">
         <!-- Logo/Header -->
         <div class="text-center">
-            <div class="mx-auto h-16 w-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mb-4 shadow-lg transform hover:scale-105 transition-transform duration-300">
+            <div class="mx-auto h-16 w-16 bg-gradient-to-r from-red-600 to-orange-500 rounded-xl flex items-center justify-center mb-4 shadow-lg transform hover:scale-105 transition-transform duration-300">
                 <i class="ri-scan-2-line ri-2x text-white"></i>
             </div>
             <h2 class="text-3xl font-bold text-gray-900 mb-2">Daftar Akun Baru</h2>
@@ -50,7 +50,7 @@
                             <i class="ri-user-line text-gray-400"></i>
                         </div>
                         <input type="text" id="name" name="name" required
-                               class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                               class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors"
                                placeholder="Masukkan nama lengkap"
                                value="{{ old('name') }}">
                     </div>
@@ -65,7 +65,7 @@
                             <i class="ri-mail-line text-gray-400"></i>
                         </div>
                         <input type="email" id="email" name="email" required
-                               class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                               class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors"
                                placeholder="Masukkan email"
                                value="{{ old('email') }}">
                     </div>
@@ -83,7 +83,7 @@
                                id="password"
                                name="password"
                                required
-                               class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                               class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors"
                                placeholder="Masukkan password (minimal 6 karakter)">
                         <button type="button"
                                 @click="showPassword = !showPassword"
@@ -105,7 +105,7 @@
                                id="password_confirmation"
                                name="password_confirmation"
                                required
-                               class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                               class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors"
                                placeholder="Masukkan ulang password">
                         <button type="button"
                                 @click="showConfirmPassword = !showConfirmPassword"
@@ -117,7 +117,7 @@
 
                 <div>
                     <button type="submit"
-                            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300">
+                            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-300">
                         <i class="ri-user-add-line mr-2"></i>
                         <span>Daftar</span>
                     </button>
@@ -125,7 +125,7 @@
 
                 <div class="text-center pt-2">
                     <span class="text-sm text-gray-600">Sudah punya akun? </span>
-                    <a href="{{ route('login') }}" class="text-sm font-medium text-blue-600 hover:text-blue-500 transition-colors">
+                    <a href="{{ route('login') }}" class="text-sm font-medium text-red-600 hover:text-red-500 transition-colors">
                         Masuk disini
                     </a>
                 </div>
@@ -134,7 +134,7 @@
 
         <!-- Footer -->
         <div class="text-center text-sm text-gray-500">
-             <p>&copy; <?= date('Y') ?> Sistem Absensi RFID. All rights reserved.</p>
+             <p>&copy; {{ date('Y') }} Sistem Absensi RFID. All rights reserved.</p>
         </div>
     </div>
 

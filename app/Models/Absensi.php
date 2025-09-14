@@ -9,50 +9,41 @@ class Absensi extends Model
 {
     use HasFactory;
 
-    protected $table = 'absensi'; // Specify the table name if different from Laravel's convention
+    protected $table = 'absensi';
 
     protected $fillable = [
         'user_id',
         'peserta_id',
         'materi_id',
-        'waktu_absen',
         'status',
-        'keterangan'
     ];
 
-    protected $casts = [
-        'waktu_absen' => 'datetime'
-    ];
-
-    // Relationship with Peserta
+    // Relasi ke Peserta
     public function peserta()
     {
         return $this->belongsTo(Peserta::class);
     }
 
-    // Relationship with Materi
-    public function absensi()
+    // Relasi ke User
+    public function user()
     {
-        return $this->hasMany(Absensi::class);
+        return $this->belongsTo(User::class);
     }
 
-    // Status options for forms
+    // Relasi ke Materi
+    public function materi()
+    {
+        return $this->belongsTo(Materi::class);
+    }
+
+    // Opsi status
     public static function statusOptions()
     {
         return [
             'hadir' => 'Hadir',
             'terlambat' => 'Terlambat',
-            'tidak_hadir' => 'Tidak Hadir'
+            'tidak_hadir' => 'Tidak Hadir',
         ];
     }
-    public function user()
-{
-    return $this->belongsTo(User::class);
 }
 
-public function materi()
-{
-    return $this->belongsTo(Materi::class);
-}
-
-}

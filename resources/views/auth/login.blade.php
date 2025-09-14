@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sistem Absensi RFID</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-gradient-to-br from-red-50 to-orange-100 min-h-screen flex items-center justify-center p-4">
     <div class="max-w-md w-full space-y-6" x-data="loginForm()">
         <!-- Logo/Header -->
         <div class="text-center">
-            <div class="mx-auto h-16 w-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mb-4 shadow-lg transform hover:scale-105 transition-transform duration-300">
+            <div class="mx-auto h-16 w-16 bg-gradient-to-r from-red-600 to-orange-500 rounded-xl flex items-center justify-center mb-4 shadow-lg transform hover:scale-105 transition-transform duration-300">
                 <i class="ri-scan-2-line ri-2x text-white"></i>
             </div>
             <h2 class="text-3xl font-bold text-gray-900 mb-2">Sistem Absensi RFID</h2>
@@ -39,7 +40,10 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('login') }}" class="space-y-5" x-ref="loginForm">
+            <form method="POST" action="{{ route('login') }}"
+                  class="space-y-5"
+                  x-ref="loginForm"
+                  @submit.prevent="loading = true; $refs.loginForm.submit()">
                 @csrf
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
@@ -50,9 +54,10 @@
                             <i class="ri-mail-line text-gray-400"></i>
                         </div>
                         <input type="email" id="email" name="email" required
-                               class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                               class="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors"
                                placeholder="Masukkan email"
-                               value="{{ old('email') }}">
+                               value="{{ old('email') }}"
+                               :disabled="loading">
                     </div>
                 </div>
 
@@ -68,26 +73,49 @@
                                id="password"
                                name="password"
                                required
-                               class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                               placeholder="Masukkan password">
+                               class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-colors"
+                               placeholder="Masukkan password"
+                               :disabled="loading">
                         <button type="button"
                                 @click="showPassword = !showPassword"
-                                class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                            <i :class="showPassword ? 'ri-eye-off-line' : 'ri-eye-line'" class="text-gray-400 hover:text-gray-600"></i>
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                :disabled="loading">
+                            <i :class="showPassword ? 'ri-eye-off-line' : 'ri-eye-line'"
+                               class="text-gray-400 hover:text-gray-600"></i>
                         </button>
                     </div>
                 </div>
                 <div>
                     <button type="submit"
-                            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300">
-                        <i class="ri-login-box-line mr-2"></i>
-                        <span>Masuk</span>
+                            :disabled="loading"
+                            class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed">
+
+                        <template x-if="!loading">
+                            <span class="flex items-center">
+                                <i class="ri-login-box-line mr-2"></i>
+                                Masuk
+                            </span>
+                        </template>
+
+                        <template x-if="loading">
+                            <span class="flex items-center">
+                                <!-- Spinner pakai Tailwind animate-spin -->
+                                <svg class="animate-spin h-5 w-5 text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                     viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10"
+                                            stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor"
+                                          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                                </svg>
+                                Memproses...
+                            </span>
+                        </template>
                     </button>
                 </div>
 
                 <div class="text-center pt-2">
                     <span class="text-sm text-gray-600">Belum punya akun? </span>
-                    <a href="{{ route('register') }}" class="text-sm font-medium text-blue-600 hover:text-blue-500 transition-colors">
+                    <a href="{{ route('register') }}" class="text-sm font-medium text-red-600 hover:text-red-500 transition-colors">
                         Daftar sekarang
                     </a>
                 </div>
@@ -96,17 +124,17 @@
 
         <!-- Footer -->
         <div class="text-center text-sm text-gray-500">
-             <p>&copy; <?= date('Y') ?> Sistem Absensi RFID. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} Sistem Absensi RFID. All rights reserved.</p>
         </div>
     </div>
 
     <script>
     function loginForm() {
         return {
-            showPassword: false
+            showPassword: false,
+            loading: false
         }
     }
     </script>
-
 </body>
 </html>

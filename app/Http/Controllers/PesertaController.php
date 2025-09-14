@@ -7,41 +7,51 @@ use App\Models\Peserta;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class PesertaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-       $peserta = Peserta::where('user_id', Auth::id())->orderBy('nama')->paginate(20);
+        $query = Peserta::where('user_id', Auth::id());
+
+        // Jika ada keyword pencarian
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                    ->orWhere('id_rfid', 'like', "%{$search}%")
+                    ->orWhere('asal_delegasi', 'like', "%{$search}%")
+                    ->orWhere('komisi', 'like', "%{$search}%");
+            });
+        }
+
+        $peserta = $query->orderBy('nama')->paginate(20);
+
+        // tetap bawa query search agar pagination tidak hilang keyword
+        $peserta->appends($request->only('search'));
+
         return view('peserta.index', compact('peserta'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view('peserta.create');
+        $komisiList = Peserta::getKomisiList();
+        return view('peserta.create', compact('komisiList'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'id_rfid' => 'required|unique:peserta',
+            'id_rfid' => 'required|unique:peserta,id_rfid',
             'nama' => 'required',
             'asal_delegasi' => 'required',
-            'komisi' => 'required|in:organisasi,program-kerja,rekomendasi',
+            'komisi' => ['required', Rule::in(Peserta::getKomisiList())],
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
         ]);
 
         Peserta::create([
-            'user_id' =>Auth::id(),
+            'user_id' => Auth::id(),
             'id_rfid' => $request->id_rfid,
             'nama' => $request->nama,
             'asal_delegasi' => $request->asal_delegasi,
@@ -52,27 +62,25 @@ class PesertaController extends Controller
         return redirect()->route('peserta.index')->with('success', 'Peserta berhasil ditambahkan.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $peserta = Peserta::where('user_id', Auth::id())->findOrFail($id);
-        return view('peserta.edit', compact('peserta'));
+        $komisiList = Peserta::getKomisiList();
+        return view('peserta.edit', compact('peserta', 'komisiList'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
         $peserta = Peserta::where('user_id', Auth::id())->findOrFail($id);
 
         $request->validate([
-            'id_rfid' => 'required|unique:peserta,id_rfid,' . $id,
+            'id_rfid' => [
+                'required',
+                Rule::unique('peserta', 'id_rfid')->ignore($peserta->id),
+            ],
             'nama' => 'required',
             'asal_delegasi' => 'required',
-            'komisi' => 'required|in:organisasi,program-kerja,rekomendasi',
+            'komisi' => ['required', Rule::in(Peserta::getKomisiList())],
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
         ]);
 
@@ -87,9 +95,6 @@ class PesertaController extends Controller
         return redirect()->route('peserta.index')->with('success', 'Peserta berhasil diupdate.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         $peserta = Peserta::where('user_id', Auth::id())->findOrFail($id);
@@ -98,9 +103,6 @@ class PesertaController extends Controller
         return redirect()->route('peserta.index')->with('success', 'Peserta berhasil dihapus.');
     }
 
-    /**
-     * Export the peserta data to PDF.
-     */
     public function export()
     {
         $peserta = Peserta::where('user_id', Auth::id())->orderBy('nama')->get();

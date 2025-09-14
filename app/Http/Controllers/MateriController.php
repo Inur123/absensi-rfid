@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Materi;
+use App\Models\Komisi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,13 +11,17 @@ class MateriController extends Controller
 {
     public function index()
     {
-        $materis = Materi::where('user_id', Auth::id())->orderBy('nama')->get();
+        $materis = Materi::with('komisis')
+            ->where('user_id', Auth::id())
+            ->orderBy('nama')
+            ->get();
+
         return view('materi.index', compact('materis'));
     }
 
     public function create()
     {
-        $komisiList = Materi::getKomisiList();
+        $komisiList = Komisi::all();
         return view('materi.create', compact('komisiList'));
     }
 
@@ -25,29 +30,38 @@ class MateriController extends Controller
         $request->validate([
             'nama' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
-            'komisi' => 'required|in:organisasi,program-kerja,rekomendasi',
+            'komisi_ids' => 'required|array',
+            'komisi_ids.*' => 'exists:komisis,id',
         ]);
 
-        Materi::create([
+        $materi = Materi::create([
             'user_id' => Auth::id(),
             'nama' => $request->nama,
             'deskripsi' => $request->deskripsi,
-            'komisi' => $request->komisi,
         ]);
+
+        $materi->komisis()->sync($request->komisi_ids);
 
         return redirect()->route('materi.index')->with('success', 'Materi berhasil ditambahkan.');
     }
 
     public function show($id)
     {
-        $materi = Materi::where('user_id', Auth::id())->findOrFail($id);
+        $materi = Materi::with('komisis')
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
+
         return view('materi.show', compact('materi'));
     }
 
     public function edit($id)
     {
-        $materi = Materi::where('user_id', Auth::id())->findOrFail($id);
-        $komisiList = Materi::getKomisiList();
+        $materi = Materi::with('komisis')
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
+
+        $komisiList = Komisi::all();
+
         return view('materi.edit', compact('materi', 'komisiList'));
     }
 
@@ -58,14 +72,16 @@ class MateriController extends Controller
         $request->validate([
             'nama' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
-            'komisi' => 'required|in:organisasi,program-kerja,rekomendasi',
+            'komisi_ids' => 'required|array',
+            'komisi_ids.*' => 'exists:komisis,id',
         ]);
 
         $materi->update([
             'nama' => $request->nama,
             'deskripsi' => $request->deskripsi,
-            'komisi' => $request->komisi,
         ]);
+
+        $materi->komisis()->sync($request->komisi_ids);
 
         return redirect()->route('materi.index')->with('success', 'Materi berhasil diperbarui.');
     }
@@ -73,7 +89,10 @@ class MateriController extends Controller
     public function destroy($id)
     {
         $materi = Materi::where('user_id', Auth::id())->findOrFail($id);
+
+        $materi->komisis()->detach();
         $materi->delete();
+
         return redirect()->route('materi.index')->with('success', 'Materi berhasil dihapus.');
     }
 }
