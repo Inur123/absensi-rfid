@@ -170,56 +170,56 @@
                 </div>
             </div>
 
-           @if (session('success') || session('error'))
-    <div id="statusModal"
-        class="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm">
-        <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl transform animate-bounce">
-            <div class="text-center">
-                @if (session('success'))
-                    <div
-                        class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 mb-4">
-                        <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M5 13l4 4L19 7" />
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-3">Absensi Berhasil!</h3>
-                    <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-xl mb-4">
-                        {{ session('success') }}
-                    </div>
-                @elseif(session('error'))
-                    <div
-                        class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-r from-red-400 to-rose-500 mb-4">
-                        <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-3">Absensi Gagal!</h3>
-                    <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-xl mb-4">
-                        {{ session('error') }}
-                    </div>
-                @endif
+            @if (session('success') || session('error'))
+                <div id="statusModal"
+                    class="fixed inset-0 flex items-center justify-center z-50 bg-black/50 backdrop-blur-sm">
+                    <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl transform animate-bounce">
+                        <div class="text-center">
+                            @if (session('success'))
+                                <div
+                                    class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 mb-4">
+                                    <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-3">Absensi Berhasil!</h3>
+                                <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-xl mb-4">
+                                    {{ session('success') }}
+                                </div>
+                            @elseif(session('error'))
+                                <div
+                                    class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-r from-red-400 to-rose-500 mb-4">
+                                    <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-3">Absensi Gagal!</h3>
+                                <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-xl mb-4">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
 
-                <button type="button" onclick="closeModal()"
-                    class="w-full bg-gradient-to-r from-red-700 to-red-600 hover:from-red-800 hover:to-red-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300">
-                    Tutup
-                </button>
-            </div>
-        </div>
-    </div>
+                            <button type="button" onclick="closeModal()"
+                                class="w-full bg-gradient-to-r from-red-700 to-red-600 hover:from-red-800 hover:to-red-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300">
+                                Tutup
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-    <script>
-        // Auto close modal setelah 2 detik
-        setTimeout(() => {
-            if (document.getElementById('statusModal')) {
-                closeModal();
-            }
-        }, 2000);
-    </script>
-@endif
+                <script>
+                    // Auto close modal setelah 2 detik
+                    setTimeout(() => {
+                        if (document.getElementById('statusModal')) {
+                            closeModal();
+                        }
+                    }, 2000);
+                </script>
+            @endif
 
 
             <form method="POST" action="{{ route('absensi.store') }}" id="rfid_form"
@@ -280,51 +280,51 @@
     </style>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const rfidInput = document.getElementById('rfid_input');
-        const scanFeedback = document.getElementById('scan_feedback');
-        const rfidForm = document.getElementById('rfid_form');
-        let pendingValue = null; // simpan RFID sementara
+        document.addEventListener('DOMContentLoaded', function() {
+            const rfidInput = document.getElementById('rfid_input');
+            const scanFeedback = document.getElementById('scan_feedback');
+            const rfidForm = document.getElementById('rfid_form');
+            let pendingValue = null; // simpan RFID sementara
 
-        rfidInput.focus();
+            rfidInput.focus();
 
-        function handleRfidScan(value) {
-            if (value.length >= 8) {
-                console.log('RFID Terbaca:', value);
-                scanFeedback.classList.remove('hidden');
-                pendingValue = value; // simpan sementara, jangan submit dulu
+            function handleRfidScan(value) {
+                if (value.length >= 8) {
+                    console.log('RFID Terbaca:', value);
+                    scanFeedback.classList.remove('hidden');
+                    pendingValue = value; // simpan sementara, jangan submit dulu
+                }
             }
-        }
 
-        rfidInput.addEventListener('input', function(e) {
-            handleRfidScan(e.target.value);
+            rfidInput.addEventListener('input', function(e) {
+                handleRfidScan(e.target.value);
+            });
+
+            let lastValue = '';
+            setInterval(() => {
+                if (rfidInput.value && rfidInput.value !== lastValue) {
+                    lastValue = rfidInput.value;
+                    handleRfidScan(lastValue);
+                }
+            }, 200);
+
+            window.addEventListener('beforeunload', function() {
+                rfidInput.value = '';
+            });
+
+            // fungsi close modal
+            window.closeModal = function() {
+                document.getElementById('statusModal').classList.add('hidden');
+                if (pendingValue) {
+                    // isi form lalu submit
+                    rfidInput.value = pendingValue;
+                    scanFeedback.classList.remove('hidden');
+                    setTimeout(() => {
+                        rfidForm.submit();
+                    }, 200);
+                }
+            }
         });
-
-        let lastValue = '';
-        setInterval(() => {
-            if (rfidInput.value && rfidInput.value !== lastValue) {
-                lastValue = rfidInput.value;
-                handleRfidScan(lastValue);
-            }
-        }, 200);
-
-        window.addEventListener('beforeunload', function() {
-            rfidInput.value = '';
-        });
-
-        // fungsi close modal
-        window.closeModal = function() {
-            document.getElementById('statusModal').classList.add('hidden');
-            if (pendingValue) {
-                // isi form lalu submit
-                rfidInput.value = pendingValue;
-                scanFeedback.classList.remove('hidden');
-                setTimeout(() => {
-                    rfidForm.submit();
-                }, 200);
-            }
-        }
-    });
-</script>
+    </script>
 
 @endsection
