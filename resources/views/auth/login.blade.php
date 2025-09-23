@@ -3,7 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Sistem Absensi RFID</title>
+    <title>Login - Sistem Absensi Konferensi IPNU & IPPNU</title>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Masuk ke dashboard admin Sistem Absensi RFID untuk Konferensi IPNU-XVIII & IPPNU-XVII Kabupaten Magetan guna mengelola data kehadiran dengan teknologi RFID.">
+    <meta name="keywords" content="sistem absensi, RFID, IPNU, IPPNU, konferensi Magetan, absensi konferensi, login admin">
+    <meta name="author" content="Sistem Absensi Konferensi IPNU & IPPNU">
+    <meta name="robots" content="index, follow">
+    <!-- Open Graph Tags for Social Media -->
+    <meta property="og:title" content="Login - Sistem Absensi Konferensi IPNU & IPPNU">
+    <meta property="og:description" content="Akses dashboard admin untuk mengelola absensi Konferensi IPNU-XVIII & IPPNU-XVII Kabupaten Magetan menggunakan teknologi RFID.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ route('login') }}">
+    <meta property="og:image" content="{{ asset('images/logo.png') }}">
+    <meta property="og:site_name" content="Sistem Absensi Konferensi IPNU & IPPNU">
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Login - Sistem Absensi Konferensi IPNU & IPPNU">
+    <meta name="twitter:description" content="Masuk ke dashboard admin untuk mengelola absensi Konferensi IPNU-XVIII & IPPNU-XVII Kabupaten Magetan.">
+    <meta name="twitter:image" content="{{ asset('images/logo.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
 </head>
